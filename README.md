@@ -1,3 +1,24 @@
+Personal fork notes:
+
+Had to build my own grafana with plugins already installed.
+
+This way it doesn't crash the docker image if there's no internet connection.
+
+For that:
+
+* `git clone https://github.com/grafana/grafana/ grafana-with-built-plugins`
+* `cd grafana-with-built-plugins/packaging/docker/custom`
+* Run command bellow *(network=host argument is needed as otherwise the container doesn't have internet.. at least in my pi)*
+
+```
+$ docker build --platform arm64 -t grafana:latest-with-plugins \
+  --build-arg "GRAFANA_VERSION=master" \
+  --build-arg GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource \
+  --network=host .
+```
+
+---
+
 # Docker-compose files for a simple uptodate
 # InfluxDB
 # + Grafana stack
