@@ -56,9 +56,9 @@ services:
       context: ../pi-hole-agent
     container_name: pihole-agent
     restart: always
+    env_file:
+      - 'env.pihole'
     links:
       - influxdb
     depends_on:
       - influxdb
-    env_file:
-      - 'env.pihole'
