@@ -1,4 +1,8 @@
-Personal fork notes:
+## averissimo Fork!!
+
+> You probably don't wanna be here! see nicolargo/docker-influxdb-grafana
+
+Personal notes:
 
 Had to build my own grafana with plugins already installed.
 
