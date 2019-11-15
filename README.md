@@ -1,6 +1,6 @@
-## averissimo Fork!!
+## Fork from @averissimo
 
-> You probably don't wanna be here! see nicolargo/docker-influxdb-grafana
+> You probably don't wanna be here! see [nicolargo/docker-influxdb-grafana](https://github.com/nicolargo/docker-influxdb-grafana)
 
 Personal notes:
 
