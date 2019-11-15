@@ -49,3 +49,26 @@ services:
       # Data persistency
       # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
       - /srv/docker/grafana/data:/var/lib/grafana
+
+
+  piholeagent:
+    build:
+      context: ../pi-hole-agent
+    container_name: pihole-agent
+    restart: always
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
+    environment:
+
+      # Replace details with your InfluxDB's hostname and credentials
+      PIHOLE_INFLUXDB_HOST: "influxdb"
+      PIHOLE_INFLUXDB_PORT: "8086"
+      #PIHOLE_INFLUXDB_USERNAME: "pihole"
+      #PIHOLE_INFLUXDB_PASSWORD: "pihole"
+      PIHOLE_INFLUXDB_DATABASE: "telegraf"
+
+      # Replace with your Pi-Hole's address including path to API below
+      PIHOLE_INSTANCES: "pihole=http://192.168.4.192/admin/api.php"
+
