@@ -15,7 +15,10 @@ services:
       # Data persistency
       # sudo mkdir -p /srv/docker/influxdb/data
       - /srv/docker/influxdb/data:/var/lib/influxdb
-  
+    networks:
+      - default
+#      - vlan
+          
   telegraf:
     restart: always
     image: telegraf:latest
@@ -26,6 +29,8 @@ services:
       - influxdb
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - default
   
   grafana:
     #image: grafana/grafana:master
@@ -49,6 +54,10 @@ services:
       # Data persistency
       # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
       - /srv/docker/grafana/data:/var/lib/grafana
+    networks:
+      default:
+#      vlan:
+#          ipv4_address: 192.168.4.99
 
 
   piholeagent:
@@ -62,3 +71,37 @@ services:
       - influxdb
     depends_on:
       - influxdb
+    networks:
+      - default
+
+  sensoragent:
+    build:
+      context: ../sensor-udp-server-client
+      network: host
+    container_name: sensoragent
+    restart: always
+    ports:
+      - '20001:20001/udp'
+#    links:
+#      - influx
+#    volumes:
+#      - "./server/server.py:/usr/src/app/server.py"
+    environment:
+      DATABASE_HOST: influxdb
+      DATABASE_PORT: 8086
+      DATABASE_TABLE: telegraf
+      #DATABASE_USER: root
+      #DATABASE_PASSWD: root
+
+networks:
+  default:
+    driver: bridge
+#  vlan:                         # Name of network
+#    driver: ipvlan                       # Use the macvlan network driver
+#    driver_opts:
+#      com.docker.network.enable_ipv4: "true"
+#      ipvlan_mode: l2
+#      parent: wlan0.50
+#    ipam:
+#      config:
+#        - subnet: 192.168.5.0/24          # Specify subnet
