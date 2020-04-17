@@ -40,6 +40,7 @@ services:
       args:
         GRAFANA_VERSION: master
         GF_INSTALL_PLUGINS: grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
+      network: host
     container_name: grafana
     ports:
       - "3000:3000"
@@ -63,6 +64,7 @@ services:
   piholeagent:
     build:
       context: ../pi-hole-agent
+      network: host
     container_name: pihole-agent
     restart: always
     env_file:
