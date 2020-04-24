@@ -61,20 +61,20 @@ services:
 #          ipv4_address: 192.168.4.99
 
 
-  piholeagent:
-    build:
-      context: ../pi-hole-agent
-      network: host
-    container_name: pihole-agent
-    restart: always
-    env_file:
-      - 'env.pihole'
-    links:
-      - influxdb
-    depends_on:
-      - influxdb
-    networks:
-      - default
+#  piholeagent:
+#    build:
+#      context: ../pi-hole-agent
+#      network: host
+#    container_name: pihole-agent
+#    restart: always
+#    env_file:
+#      - 'env.pihole'
+#    links:
+#      - influxdb
+#    depends_on:
+#      - influxdb
+#    networks:
+#     - default
 
   sensoragent:
     build:
