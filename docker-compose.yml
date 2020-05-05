@@ -29,18 +29,10 @@ services:
       - influxdb
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    networks:
-      - default
   
   grafana:
-    #image: grafana/grafana:master
+    image: betashil/grafana
     restart: always
-    build: 
-      context: ../grafana-with-built-plugins/packaging/docker/custom
-      args:
-        GRAFANA_VERSION: master
-        GF_INSTALL_PLUGINS: grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource
-      network: host
     container_name: grafana
     ports:
       - "3000:3000"
@@ -55,37 +47,17 @@ services:
       # Data persistency
       # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
       - /srv/docker/grafana/data:/var/lib/grafana
-    networks:
-      default:
-#      vlan:
-#          ipv4_address: 192.168.4.99
-
-
-#  piholeagent:
-#    build:
-#      context: ../pi-hole-agent
-#      network: host
-#    container_name: pihole-agent
-#    restart: always
-#    env_file:
-#      - 'env.pihole'
-#    links:
-#      - influxdb
-#    depends_on:
-#      - influxdb
-#    networks:
-#     - default
 
   sensoragent:
-    build:
-      context: ../sensor-udp-server-client
-      network: host
+    image: betashil/sensor-udp-server-client
     container_name: sensoragent
     restart: always
     ports:
       - '20001:20001/udp'
-#    links:
-#      - influx
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
 #    volumes:
 #      - "./server/server.py:/usr/src/app/server.py"
     environment:
@@ -95,15 +67,3 @@ services:
       #DATABASE_USER: root
       #DATABASE_PASSWD: root
 
-networks:
-  default:
-    driver: bridge
-#  vlan:                         # Name of network
-#    driver: ipvlan                       # Use the macvlan network driver
-#    driver_opts:
-#      com.docker.network.enable_ipv4: "true"
-#      ipvlan_mode: l2
-#      parent: wlan0.50
-#    ipam:
-#      config:
-#        - subnet: 192.168.5.0/24          # Specify subnet
